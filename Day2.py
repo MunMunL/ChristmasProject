@@ -29,23 +29,23 @@ game_red = 12
 game_green = 13
 game_blue = 14
 
-
+# Open file split by each game and the game results ':' in all_games list
 with open("day_2_input.txt", mode="r") as input_file:
     all_games = [i.split(": ")[1] for i in input_file.read().strip().split("\n")]
-print(all_games)
-
+# For each game, split each game results by sub-games ';' and by colour ','
 game_no = 1
 for game in all_games:
     sub_game = [i.split(", ") for i in game.split("; ")]
-    print(sub_game)
+    print(f"Game num {game_no}")
+    print(f"Game roll: \n{sub_game}")
 
     max_red = 0
     max_green = 0
     max_blue = 0
+    # For each colour in each sub game contains '# colour' split by ''.
+    # If colour is in subgame, find max number of dice used for each roll, add to max_colour
     for colour in sub_game:
-        for index in range (len(colour)):
-
-            # print(colour[index].split())
+        for index in range(len(colour)):
             if (colour[index].split()[1]) == "red":
                 red = int((colour[index].split()[0]))
                 if red > max_red:
@@ -59,23 +59,13 @@ for game in all_games:
                 if blue > max_blue:
                     max_blue = blue
 
-    print(max_red, max_green, max_blue)
-    if max_red < game_red and max_green < game_green and max_blue < game_blue:
+    print(f"max_red: {max_red}, max_green: {max_green}, max_blue: {max_blue}")
+    # If max_colour is less than or equal to the game rules, then add to the possible_game_id_list to sum
+    if max_red <= game_red and max_green <= game_green and max_blue <= game_blue:
         possible_game_id_list.append(game_no)
+        print(f"Game_num {game_no} is possible")
     game_no += 1
 print(possible_game_id_list)
 print(sum(possible_game_id_list))
 
-
-    # sub_game_colour = [j.split(" ") for j in sub_game]
-    # print(sub_game_colour)
-    # for k in range(6):
-    #     sub_game_colour_dict = sub_game_colour[k](dict(zip(sub_game_colour[::2], sub_game_colour[1::2])))
-    #     print(sub_game_colour_dict)
-
-
-
-
-# print(all_games[0])
-# print(len(all_games))
 
