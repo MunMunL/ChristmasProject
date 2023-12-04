@@ -28,54 +28,42 @@
 # Of course, the actual engine schematic is much larger. What is the sum of all of the part numbers in the engine schematic?
 #
 
-import numpy as np
+# Open file splitting each row
 with open("day_3_input.txt", mode="r") as input_file:
-    grid = np.array([list(line) for line in input_file.read().strip().split("\n")])
+    grid = input_file.read().splitlines()
     print(grid)
+    coordinates = set()
 
-# print(grid[0][1])
-# print(len(grid[0]))
-# print(len(grid))
-numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-dots = ["."]
-non_symbols = numbers + dots
-symbols_list = []
+# Find all symbols
+for row_coor, row_value in enumerate(grid):
+    for column_coor, char in enumerate(row_value):
+        # If character is a digit or "." skip
+        if char.isdigit() or char == ".":
+            continue
+        # For symbols identified; check the 8 surrounding spots for digits
+        for current_row in [row_coor - 1, row_coor, row_coor + 1]:
+            for current_column in [column_coor - 1, column_coor, column_coor + 1]:
+                # Skip if out of bound rows and columns, or not a digit
+                if (current_row < 0 or current_row >= len(grid)
+                        or current_column < 0 or current_column >= len(grid[current_row])
+                        or not grid[current_row][current_column].isdigit()):
+                    continue
+                # For digits identified; append coordinates of first digits
+                while current_column > 0 and grid[current_row][current_column - 1].isdigit():
+                    current_column -= 1
+                coordinates.add((current_row, current_column))
+
+print(coordinates)
+# Go through digit coordinates to get connected numbers in string, convert to integer and append to numbers_list
 numbers_list = []
-numbers_coor_list = []
 
-def symbols_pos():
-    y = 0
-    x = 0
-    for y in range(len(grid)):
-        while x < len(grid[0]):
-            for char in grid[y][x]:
-                if char not in non_symbols:
-                    print(char)
-                    print(y,x)
-                    symbols_list.append((y, x))
-                x += 1
-        y += 1
-        x= 0
-
-    print(symbols_list)
-    return(symbols_list)
-
-
-
-y = 0
-x = 0
-for y in range(len(grid)):
-    while x < len(grid[0]):
-        for char in grid[y][x]:
-            if char in numbers:
-                print(char)
-                print(y, x)
-                numbers_list.append(char)
-                numbers_coor_list.append((y,x))
-            if grid[y][x+1] in numbers:
-                x += 1
-    y += 1
-    x = 0
+for row_coor, column_coor in coordinates:
+    numbers_str = ""
+    while column_coor < len(grid[row_coor]) and grid[row_coor][column_coor].isdigit():
+        numbers_str += grid[row_coor][column_coor]
+        column_coor += 1
+        print(numbers_str)
+    numbers_list.append(int(numbers_str))
 
 print(numbers_list)
-print(numbers_coor_list)
+print(sum(numbers_list))
