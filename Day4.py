@@ -32,6 +32,7 @@
 #
 # Take a seat in the large pile of colorful cards. How many points are they worth in total?
 
+# Open file splitting each card game
 with open("day_4_input.txt", mode="r") as input_file:
     all_cards = [i.split(": ")[1] for i in input_file.read().strip().split("\n")]
 
@@ -43,26 +44,27 @@ score = []
 
 def card_draw():
     card_num = 1
+    # For each card round, split winning numbers and draw numbers identified by "|".
     for card in all_cards:
         print(f"Card number {card_num}")
         winning_numbers_list = card.split(" | ")[0].split()
         print(f"Winning numbers: {winning_numbers_list}")
         draw_numbers_list = card.split(" | ")[1].split()
         print(f"Draw numbers: {draw_numbers_list}")
+        # Compare draw number list to winning list and count number of winning numbers
         count = 0
         for draw in draw_numbers_list:
             if draw in winning_numbers_list:
                 print(draw)
                 count += 1
         print(f"Number of winning numbers: {count}")
+        # Points scored is 0 if no winning numbers and 2^(n-1) where n is number of winning numbers.
         if count == 0:
             card_score = 0
         else:
             card_score = 2 ** (count - 1)
             score.append(card_score)
         card_num += 1
-
-
 
 
 card_draw()
