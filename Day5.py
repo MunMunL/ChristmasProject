@@ -93,65 +93,31 @@
 #
 # What is the lowest location number that corresponds to any of the initial seed numbers?
 
-
+# Open file, splitting to 2 groups, seeds and * all mappings
 with open("day_5_input.txt", mode="r") as input_file:
-    # file = input_file.read().strip().split("\n\n")
-    # print(file)
-    raw_mapping = [i.strip().split(":")[1] for i in input_file.read().strip().split("\n\n")]
-    seed_mapping = [int(i) for i in raw_mapping[0].strip().split(" ")]
-    seed_soil_mapping = [i.split(" ") for i in raw_mapping[1].strip().split("\n")]
-    soil_fert_mapping = [i.split(" ") for i in raw_mapping[2].strip().split("\n")]
-    fert_water_mapping = [i.split(" ") for i in raw_mapping[3].strip().split("\n")]
-    water_light_mapping = [i.split(" ") for i in raw_mapping[4].strip().split("\n")]
-    light_temp_mapping = [i.split(" ") for i in raw_mapping[5].strip().split("\n")]
-    temp_humid_mapping = [i.split(" ") for i in raw_mapping[6].strip().split("\n")]
-    humid_location_mapping = [i.split(" ") for i in raw_mapping[7].strip().split("\n")]
-#
-#     # all_cards = [i.split(": ")[1] for i in input_file.read().strip().split("\n")]
-#
-print(raw_mapping)
-print(len(raw_mapping))
-print(f"seeds :{seed_mapping}")
-print(f"seed-to-soil map: {seed_soil_mapping}")
-print(f"humidity-to-location map: {humid_location_mapping}")
+    seeds, *mappings = input_file.read().strip().split("\n\n")
+    print(seeds)
+# Split to get seeds as a list of int
+seeds = [int(i) for i in seeds.split(":")[1].strip().split(" ")]
+print(seeds)
+# For each mapping, obtain the rules range as int
+for mapping in mappings:
+    range = []
+    for rule in mapping.splitlines()[1:]:
+        range.append(list(map(int, rule.split())))
+    print(range)
 
-seq = [i for i in range(100)]
-seed_list = seq
-soil_list = seq
-fert_list = seq
-water_list = seq
-light_list = seq
-temp_list = seq
-humid_list = seq
-location_list = seq
+    # For each seed in list seeds, update the mapping, seed - source + dest
+    updated_mapping = []
 
-list_num = 0
-all_lists = [seed_list, soil_list]
-all_mappings = [seed_soil_mapping]
-
-# seed - soil
-for rule in seed_soil_mapping:
-    dest = int(rule[0])
-    source = int(rule[1])
-    range_len = int(rule[2])
-    source_pos = []
-
-    # find index of source in source list, replace with dest an source(index)
-    for iter in range(range_len):
-        target_index = seed_list.index(source)
-        soil_list[target_index] = dest + iter
-print(soil_list)
-#
-# # soil - fert
-# for rule in soil_fert_mapping:
-#     dest = int(rule[0])
-#     source = int(rule[1])
-#     range_len = int(rule[2])
-#     source_pos = []
-#
-#     # find index of source in source list, replace with dest an source(index)
-#     for iter in range(range_len):
-#         target_index = source + (iter - 1)
-#         fert_list[target_index] = dest + iter
-#
-# print(fert_list)
+    for seed in seeds:
+        # if seed is in between source and source + range len then update mapping
+        for a, b, c in range:
+            if b <= seed < b + c:
+                updated_mapping.append(seed - b + a)
+                break
+        # if not in range then seed mapping not changed
+        else:
+            updated_mapping.append(seed)
+    seeds = updated_mapping
+print(min(seeds))
