@@ -40,6 +40,7 @@
 #
 # Determine the number of ways you could beat the record in each race. What do you get if you multiply these numbers together?
 
+
 # Split file to obtain target time and distance as int list
 with open("day_6_input.txt") as input_file:
     races = [i.strip() for i in input_file.read().split("\n")]
