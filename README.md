@@ -28,6 +28,9 @@ I have participated in the Women Who Code London Christmas Coding challenge solv
 * Day 24 - Never Tell Me The Odds
 * Day 25 - Snowverload
 
+## Technology Used:
+* Python
+  
 ## Summary
 I've used Python to solve daily challenges involving text manipulation, grid problems, creating Classes, creating functions, while loops, for loops, nested ifs, list and dictionary comprehension whilst applying the following various packages.
 
